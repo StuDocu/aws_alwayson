@@ -11,7 +11,7 @@ const googleSsoUrl = 'https://accounts.google.com/o/saml2/initsso?idpid=IDPID&sp
 const requestHeaders = {
     "Upgrade-Insecure-Requests": "1",
     "Cache-Control": "max-age=0",
-    "Content-Type": "application/x-www-form-urlencoded",    
+    "Content-Type": "application/x-www-form-urlencoded",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,"+
     "image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
     "Sec-GPC": "1",
@@ -52,7 +52,7 @@ class portWithExceptions {
             } finally {
                 storage.set({'last_msg':'err','last_msg_detail':message})
             }
-        };        
+        };
     }
 }
 
@@ -100,7 +100,7 @@ async function main() {
                 })
             }
         });
-    });    
+    });
 }
 
 main()
@@ -187,12 +187,12 @@ function awsInit(props, port=null, jobType='refresh'){
                 throw msg
             }
             let accountIndex = accountData[1]
-            if(accountIndex==-1){
-                let msg = `${accountData[2]} is not logged in. Please login and try again.`
-                throw msg
-            }
+            //if(accountIndex==-1){
+                //let msg = `${accountData[2]} is not logged in. Please login and try again.`
+                //throw msg
+            //}
             console.log(`Refreshing credentials for ${accountData[2]}`)
-            fetch(`${googleSsoUrl.replace('IDPID',props.google_idpid).replace('SPID',props.google_spid)}${accountIndex}`).then(response => {   
+            fetch(`${googleSsoUrl.replace('IDPID',props.google_idpid).replace('SPID',props.google_spid)}${accountIndex}`).then(response => {
                 response.text().then(result => {
                     let samlResponse=result.match(googleSsoRegex)[1]
                     switch (jobType) {
