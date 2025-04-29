@@ -1,9 +1,12 @@
-# AWS AlwaysON
+# AWS Roles via Google SSO
 
 ## Introduction
-AWS AlwaysOn is a browser extension that allows users that use Google Workspace (gsuite) as an IDP provier to AWS, to easily maintain sessions to the AWS console and get temporary STS credentials.
-This extension can be used as an alternative to `aws-google-auth` and doesn't require inputing credentials as long as your Google account is logged in, nor does it suffer from constant Captcha.
-The extension was developed for Chrome but works mostly fine on all major browsers except Safari which was untested.
+This repository holds the code for a browser extension that allows users that use
+Google Workspace (gsuite) as an IDP provider to login
+to AWS using roles.
+It also has a local service that updates the local client AWS credentials for the aws-cli.
+This extension can be used as an alternative to `aws-google-auth` and doesn't require filling credentials as long as your Google account is logged in to your browser, nor does it suffer from constant captchas.
+The extension has been tested on Chrome and firefox.
 
 ## Features
 - Refresh AWS Web Console session automatically to keep user logged in.
