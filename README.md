@@ -16,8 +16,8 @@ The extension was developed for Chrome but works mostly fine on all major browse
 ### Option 1 (Chrome, Firefox)
 Available directly on Chrome Web Store and Add-ons for Firefox:
 
-<a href="https://chrome.google.com/webstore/detail/aws-alwayson/lfplgkokagjgodoeojaodphmjdhlpega" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/ilyatbn/aws_alwayson/master/img/chrome.png" width="48" /></a>
-<a href="https://addons.mozilla.org/en-US/firefox/addon/aws-roles-via-google-sso/" target="_blank" rel="noopener noreferrer"><img src="https://addons.mozilla.org/en-US/firefox/addon/aws-roles-via-google-sso/master/img/ff.png" width="48" /></a>
+<a href="https://chrome.google.com/webstore/detail/aws-alwayson/lfplgkokagjgodoeojaodphmjdhlpega" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/studocu/aws_alwayson/master/img/chrome.png" width="48" /></a>
+<a href="https://addons.mozilla.org/en-US/firefox/addon/aws-roles-via-google-sso/" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/studocu/aws_alwayson/master/img/ff.png" width="48" /></a>
 
 
 ### Option 2
