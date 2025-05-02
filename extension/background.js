@@ -187,10 +187,10 @@ function awsInit(props, port=null, jobType='refresh'){
                 throw msg
             }
             let accountIndex = accountData[1]
-            //if(accountIndex==-1){
-                //let msg = `${accountData[2]} is not logged in. Please login and try again.`
-                //throw msg
-            //}
+            if(accountIndex==-1){
+                let msg = `Workaround: manually change the "extension/background.js::line:189" file to use the correct account index.`
+                throw msg
+            }
             console.log(`Refreshing credentials for ${accountData[2]}`)
             fetch(`${googleSsoUrl.replace('IDPID',props.google_idpid).replace('SPID',props.google_spid)}${accountIndex}`).then(response => {
                 response.text().then(result => {
