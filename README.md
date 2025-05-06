@@ -27,7 +27,7 @@ Available directly in Add-ons for Firefox:
 2. Go to the Chrome Extensions page.
 3. Enable Developer Mode on the right side of the page.
 4. Press "Load Unpacked".
-5. Pick the project folder.
+5. Pick the `extension` folder in the cloned repository.
 
 ### (Optional) Firefox manual installation
 1. Clone this repository.
