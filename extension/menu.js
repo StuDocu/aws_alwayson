@@ -1,8 +1,8 @@
 const storage = getApi().storage.local
-//default values for options. 
+//default values for options.
 var defaults = {organization_domain: '', google_spid: '', google_idpid: '',
-saml_provider: 'gsuite', refresh_interval: 59, session_duration: 3600, 
-platform: getPlatform(), clientupdate: false, idp_type: 'google'
+saml_provider: 'GoogleLogin', refresh_interval: 59, session_duration: 3600,
+platform: getPlatform(), clientupdate: true, idp_type: 'google'
 }
 
 function getApi() {
@@ -93,7 +93,7 @@ async function buildMenu(props){
       id: `sts_button${i}`,
       "data-index": i
     }).appendTo(`#item${i}`);
-    
+
     jQuery('<label>', {
       id: `label${i}`,
       class:"switch btncls"
@@ -104,7 +104,7 @@ async function buildMenu(props){
       id: `enable${i}`,
       "data-index": i
     }).appendTo(`#label${i}`);
-    
+
     jQuery('<span>', {
       class:"slider round"
     }).appendTo(`#label${i}`);
@@ -134,16 +134,16 @@ async function main(){
   }
   buildMenu(props)
   $("#clibtn").hover(function () {
-    alert($(this).prop("title")); 
+    alert($(this).prop("title"));
   });
   //interation with autofill btn.
   $('#autofill_btn').click(function() {
-    if($(this).css("--enabled") == 0){   
+    if($(this).css("--enabled") == 0){
       storage.set({"autofill": 1})
       $(this).css({"background-color":"#ff5400","--enabled":1})
       let port = chrome.runtime.connect({
         name: "talk to background.js"
-      });       
+      });
       port.postMessage('role_refresh');
       port.onMessage.addListener(function(msg) {
         if (msg=='roles_refreshed'){
@@ -151,11 +151,11 @@ async function main(){
         } else if (msg.includes('err')) {
           storage.get(['last_msg_detail'], function(result){
             $("#msg").text(result.last_msg_detail);
-          })            
+          })
         } else {
           console.log("Service worker response:" + msg);
         }
-      });  
+      });
     } else {
       storage.set({"autofill": 0})
       $(this).css({"background-color":"#4d4d4d","--enabled":0})
@@ -169,7 +169,7 @@ async function main(){
     });
     let port = chrome.runtime.connect({
       name: "talk to background.js"
-    });       
+    });
     port.postMessage('refreshoff');
   });
   //Save data to local storage automatically when not focusing on TxtBox
@@ -216,7 +216,7 @@ async function main(){
     if(!this.checked){
         let port = chrome.runtime.connect({
           name: "talk to background.js"
-        });         
+        });
         port.postMessage('refreshoff');
     }
     else {
@@ -239,7 +239,7 @@ async function main(){
       //start background service functions
       let port = chrome.runtime.connect({
         name: "talk to background.js"
-      });      
+      });
       port.postMessage("refreshon");
       port.onMessage.addListener(function(msg) {
         //if sts fetch went fine enable the cli button.
@@ -254,14 +254,14 @@ async function main(){
             $(this).css("background-image","url(/img/err.png)");
             storage.get(['last_msg_detail'], function(result){
               $("#msg").text(result.last_msg_detail);
-            })            
+            })
           })
         }
         else {
           console.log("Service worker response:" + msg);
         }
       })
-    } 
+    }
   })
 }
 main()
