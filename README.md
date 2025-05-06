@@ -16,22 +16,20 @@ The extension has been tested on Chrome and firefox.
 
 ## Installation
 
-### Option 1 (Chrome, Firefox)
-Available directly on Chrome Web Store and Add-ons for Firefox:
+### Firefox
+Available directly in Add-ons for Firefox:
 
-<a href="https://chrome.google.com/webstore/detail/aws-alwayson/lfplgkokagjgodoeojaodphmjdhlpega" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/studocu/aws_alwayson/master/img/chrome.png" width="48" /></a>
 <a href="https://addons.mozilla.org/en-US/firefox/addon/aws-roles-via-google-sso/" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/studocu/aws_alwayson/master/img/ff.png" width="48" /></a>
 
 
-### Option 2
- **Google Chrome:**
+### Chrome
 1. Clone this repository.
 2. Go to the Chrome Extensions page.
 3. Enable Developer Mode on the right side of the page.
 4. Press "Load Unpacked".
 5. Pick the project folder.
 
-**Mozilla Firefox:**
+### (Optional) Firefox manual installation
 1. Clone this repository.
 1. Delete the regular manifest.js and rename the manifest-firefox.js to manifest.js
 2. Go to Addons and themes in the hamburger menu.
