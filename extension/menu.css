@@ -1,22 +1,17 @@
-
-
-body {
-  background-color: rgba(199, 199, 199, 1.0);
-}
 .grid-container {
     display: grid;
     grid-gap: 5px;
-    background-color: #b2b2b2;
+    background-color: white;
     padding: 5px;
     margin-right: 25px;
   }
 
   .grid-container > div {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: black
     padding: 6px 0;
     font-size: 20px;
   }
-  
+
   .txtbox{
           display: block;
           float: left;
@@ -24,26 +19,26 @@ body {
           width: 275px;
           margin-left: 5px;
   }
-  
+
   .btncls{
       display: block;
       float: left;
       margin: 7px 10px;
   }
-  
+
   .switch {
     position: relative;
     display: inline-block;
     width: 36px;
     height: 21px;
   }
-  
-  .switch input { 
+
+  .switch input {
     opacity: 0;
     width: 0;
     height: 0;
   }
-  
+
   .slider {
     position: absolute;
     cursor: pointer;
@@ -51,11 +46,11 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: grey;
     -webkit-transition: .4s;
     transition: .4s;
   }
-  
+
   .slider:before {
     position: absolute;
     content: "";
@@ -63,29 +58,29 @@ body {
     width: 13px;
     left: 4px;
     bottom: 4px;
-    background-color: white;
+    background-color: lightgray;
     -webkit-transition: .4s;
     transition: .4s;
   }
-  
+
   input:checked + .slider {
     background-color: #ff5400;
   }
-  
+
   input:focus + .slider {
     box-shadow: 0 0 1px #ff5400;
   }
-  
+
   input:checked + .slider:before {
     -webkit-transform: translateX(16px);
     -ms-transform: translateX(16px);
     transform: translateX(16px);
   }
-  
+
   .slider.round {
     border-radius: 20px;
   }
-  
+
   .slider.round:before {
     border-radius: 50%;
   }
@@ -94,29 +89,29 @@ body {
     background-size: 26px;
     margin: 6px;
     visibility: hidden;
-    background-image: url(/img/cli.png); 
+    background-image: url(/img/cli.png);
     border: 1px solid #ddd;
     border: none;
     border-radius: 3px;
-    height: 26px; 
-    width: 26px; 
+    height: 26px;
+    width: 26px;
   }
 
   .options_btn{
-    background: url(/img/options.png); 
-    width: 24px; 
-    height: 24px; 
+    background: url(/img/options.png);
+    width: 24px;
+    height: 24px;
     border: none;
     float: right;
     margin: 0px 0px 0px 2px;
   }
 
   .autofill_btn{
-    background: url(/img/auto.png); 
+    background: url(/img/auto.png);
     background-size: 29px;
-    background-color: #4d4d4d;
-    width: 29px; 
-    height: 29px; 
+    background-color: purple;
+    width: 29px;
+    height: 29px;
     border: none;
     float: right;
     margin: -1px;
@@ -133,9 +128,9 @@ body {
   position: fixed;
   top: 0;
   z-index: 1;
-  background-color: rgba(199, 199, 199, 1.0);
+  background-color: lightgreen;
   display: inline-grid;
-  align-content: space-evenly;  
+  align-content: space-evenly;
   }
   .right {
     right: 0;
@@ -149,7 +144,7 @@ body {
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: #ff5400;
+  background-color: red;
   z-index: 1;
-  color: #ffffff;
+  color: black;
 }
