@@ -26,7 +26,7 @@ function getApi() {
 }
 
 async function main() {
-	let props = await storage.get(null);
+	const props = await storage.get(null);
 	//set default values if undefined or empty
 	for (const item of Object.keys(defaults)) {
 		if (!(item in props) || props[item] === undefined || props[item] === "") {

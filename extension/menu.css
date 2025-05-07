@@ -1,93 +1,97 @@
 .grid-container {
     display: grid;
     grid-gap: 5px;
-    background-color: white;
     padding: 5px;
     margin-right: 25px;
-  }
+}
 
-  .grid-container > div {
-    background-color: black
-    padding: 6px 0;
+.grid-container > div {
     font-size: 20px;
-  }
+    display:inline-grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    justify-content: center;
+}
 
-  .txtbox{
-          display: block;
-          float: left;
-          height: 30px;
-          width: 275px;
-          margin-left: 5px;
-  }
+.txtbox {
+    width:300px;
+    height: 50px;
+    align-self: center;
+    justify-self: center;
+}
 
-  .btncls{
-      display: block;
-      float: left;
-      margin: 7px 10px;
-  }
+.btncls{
+    /*display: block;*/
+    margin: 7px 10px;
+    align-self: center;
 
-  .switch {
+
+    justify-self: center;
+}
+
+.switch {
     position: relative;
     display: inline-block;
     width: 36px;
     height: 21px;
-  }
+}
 
-  .switch input {
+.switch input {
     opacity: 0;
     width: 0;
     height: 0;
-  }
+}
 
-  .slider {
+.slider {
     position: absolute;
     cursor: pointer;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: grey;
+    background-color: blue;
     -webkit-transition: .4s;
     transition: .4s;
-  }
+}
 
-  .slider:before {
+.slider:before {
     position: absolute;
     content: "";
     height: 13px;
     width: 13px;
     left: 4px;
     bottom: 4px;
-    background-color: lightgray;
+    background-color: yellow;
     -webkit-transition: .4s;
     transition: .4s;
-  }
+}
 
-  input:checked + .slider {
-    background-color: #ff5400;
-  }
+input:checked + .slider {
+    background-color: pink;
+}
 
-  input:focus + .slider {
-    box-shadow: 0 0 1px #ff5400;
-  }
+input:focus + .slider {
+    box-shadow: 0 0 1px pink;
+}
 
-  input:checked + .slider:before {
+input:checked + .slider:before {
     -webkit-transform: translateX(16px);
     -ms-transform: translateX(16px);
     transform: translateX(16px);
-  }
+}
 
-  .slider.round {
+.slider.round {
     border-radius: 20px;
-  }
+}
 
-  .slider.round:before {
+.slider.round:before {
     border-radius: 50%;
-  }
+}
 
-  .clibtn {
+.clibtn {
+    align-self: center;
+    justify-self: center;
     background-size: 26px;
-    margin: 6px;
     visibility: hidden;
     background-image: url(/img/cli.png);
     border: 1px solid #ddd;
@@ -95,56 +99,23 @@
     border-radius: 3px;
     height: 26px;
     width: 26px;
-  }
+}
 
-  .options_btn{
-    background: url(/img/options.png);
-    width: 24px;
-    height: 24px;
-    border: none;
-    float: right;
-    margin: 0px 0px 0px 2px;
-  }
+.clibtn:hover {
+    box-shadow: 0 0 2px 1px blue;
+}
 
-  .autofill_btn{
-    background: url(/img/auto.png);
-    background-size: 29px;
-    background-color: purple;
-    width: 29px;
-    height: 29px;
-    border: none;
-    float: right;
-    margin: -1px;
-    --enabled: 0
-  }
-
-  .clibtn:hover {
-    box-shadow: 0 0 2px 1px #ff5400;
-  }
-
-.sidebar {
-  height: 100%;
-  width: 30px;
-  position: fixed;
-  top: 0;
-  z-index: 1;
-  background-color: lightgreen;
-  display: inline-grid;
-  align-content: space-evenly;
-  }
-  .right {
-    right: 0;
-  }
-  .left {
-    left: 0;
-  }
+.topbar {
+    height: 50px;
+    width: 100%
+}
 
 .errorbar {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: red;
-  z-index: 1;
-  color: black;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: red;
+    z-index: 1;
+    color: black;
 }

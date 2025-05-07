@@ -30,14 +30,13 @@ function getApi() {
 	if (typeof chrome !== "undefined") {
 		if (typeof browser !== "undefined") {
 			return browser;
-		} else {
-			return chrome;
 		}
+			return chrome;
 	}
 }
 class portWithExceptions {
 	constructor(port) {
-		this.postMessage = function (message) {
+		this.postMessage = (message) => {
 			try {
 				port.postMessage(message);
 			} catch (err) {
@@ -46,7 +45,7 @@ class portWithExceptions {
 				storage.set({ last_msg_detail: message });
 			}
 		};
-		this.postError = function (message) {
+		this.postError = (message) => {
 			try {
 				port.postMessage(`err: ${message}`);
 				console.error(message);
@@ -59,26 +58,26 @@ class portWithExceptions {
 	}
 }
 
-getApi().runtime.onStartup.addListener(function () {
-	storage.get(null, function (props) {
-		if (props["autofill"] === undefined) storage.set({ autofill: 0 });
-		if (props["autofill"] == 1) {
+getApi().runtime.onStartup.addListener(() => {
+	storage.get(null, (props) => {
+		if (props.autofill === undefined) storage.set({ autofill: 0 });
+		if (props.autofill === 1) {
 			awsInit(props, null, "role_refresh");
 		}
 		if (confCheck(props)) awsInit(props);
 	});
 });
 
-getApi().alarms.onAlarm.addListener(function (alarm) {
-	storage.get(null, function (props) {
+getApi().alarms.onAlarm.addListener((alarm) => {
+	storage.get(null, (props) => {
 		awsInit(props);
 	});
 });
 
 async function main() {
-	getApi().runtime.onConnect.addListener(function (port) {
-		let portEx = new portWithExceptions(port);
-		port.onMessage.addListener(async function (msg) {
+    getApi().runtime.onConnect.addListener((port) => {
+		const portEx = new portWithExceptions(port);
+        port.onMessage.addListener(async (msg) => {
 			//Stop all background schedule jobs.
 			if (msg === "refreshoff") {
 				storage.set({ checked: 0 });
@@ -86,10 +85,10 @@ async function main() {
 			}
 			//Start background role refresh
 			if (msg === "refreshon") {
-				storage.get(null, function (props) {
+                storage.get(null,  (props) => {
 					if (confCheck(props)) {
 						getApi().alarms.create("refreshToken", {
-							periodInMinutes: parseInt(props.refresh_interval),
+							periodInMinutes: Number.parseInt(props.refresh_interval),
 						});
 						awsInit(props, portEx);
 					} else {
@@ -98,8 +97,8 @@ async function main() {
 				});
 			}
 			//Start role refresh
-			if (msg == "role_refresh") {
-				storage.get(null, function (props) {
+			if (msg === "role_refresh") {
+                storage.get(null, (props) => {
 					if (confCheck(props)) awsInit(props, portEx, msg);
 				});
 			}
@@ -111,9 +110,9 @@ main();
 
 function confCheck(props) {
 	if (
-		(props["organization_domain"] ||
-			props["google_idpid"] ||
-			props["google_spid"]) === ""
+		(props.organization_domain ||
+			props.google_idpid ||
+			props.google_spid) === ""
 	) {
 		return false;
 	}
@@ -130,15 +129,12 @@ function errHandler(port, msg) {
 }
 
 function refreshAwsTokensAndStsCredentials(props, port, samlResponse) {
-	let role = props[props.checked];
-	let roleArn = arnPrefix + role;
-	let awsAccount = roleArn.split(":")[4];
-	let principalArn = `${arnPrefix}${awsAccount}:saml-provider/${props.saml_provider}`;
-	let data =
-		"RelayState=&SAMLResponse=" +
-		encodeURIComponent(samlResponse) +
-		"&name=&portal=&roleIndex=" +
-		encodeURIComponent(roleArn);
+	const role = props[props.checked];
+	const roleArn = arnPrefix + role;
+	const awsAccount = roleArn.split(":")[4];
+	const principalArn = `${arnPrefix}${awsAccount}:saml-provider/${props.saml_provider}`;
+	const data =
+		`RelayState=&SAMLResponse=${encodeURIComponent(samlResponse)}&name=&portal=&roleIndex=${encodeURIComponent(roleArn)}`;
 	fetch(awsSamlUrl, {
 		method: "POST",
 		body: data,
@@ -146,24 +142,23 @@ function refreshAwsTokensAndStsCredentials(props, port, samlResponse) {
 	})
 		.then((response) => response.text())
 		.then((response) => {
-			let errorCheck = response.match(samlFetchErrorRegex);
+			const errorCheck = response.match(samlFetchErrorRegex);
 			if (errorCheck) {
-				let msg = `SAML fetch reponse returned error: ${errorCheck[1]}`;
+				const msg = `SAML fetch reponse returned error: ${errorCheck[1]}`;
 				throw msg;
-			} else {
-				let date = new Date().toLocaleString();
+			}
+				const date = new Date().toLocaleString();
 				console.log(`AWS AlwaysON refreshed tokens successfuly at ${date}`);
 				fetchSts(roleArn, principalArn, samlResponse, props, port);
-			}
 		})
 		.catch((error) => {
-			let msg = `Error in SAML fetch:${error}`;
+			const msg = `Error in SAML fetch:${error}`;
 			errHandler(port, msg);
 		});
 }
 
 function refreshAwsRoles(port, samlResponse) {
-	let data = "RelayState=&SAMLResponse=" + encodeURIComponent(samlResponse);
+	const data = `RelayState=&SAMLResponse=${encodeURIComponent(samlResponse)}`;
 	fetch(awsSamlUrl, {
 		method: "POST",
 		body: data,
@@ -171,11 +166,11 @@ function refreshAwsRoles(port, samlResponse) {
 	})
 		.then((response) => response.text())
 		.then((response) => {
-			let errorCheck = response.match(samlFetchErrorRegex);
+			const errorCheck = response.match(samlFetchErrorRegex);
 			if (errorCheck) {
-				let msg = `SAML fetch reponse returned error: ${errorCheck[1]}`;
+				const msg = `SAML fetch reponse returned error: ${errorCheck[1]}`;
 				throw msg;
-			} else {
+			}
 				let i = 0;
 				const parseGlobal = RegExp(roleParseRegex, "g");
 				let matches;
@@ -185,10 +180,9 @@ function refreshAwsRoles(port, samlResponse) {
 				}
 				storage.set({ roleCount: i });
 				if (port) port.postMessage("roles_refreshed");
-			}
 		})
 		.catch((error) => {
-			let msg = `Error in SAML fetch:${error}`;
+			const msg = `Error in SAML fetch:${error}`;
 			errHandler(port, msg);
 		});
 }
@@ -199,16 +193,16 @@ function awsInit(props, port = null, jobType = "refresh") {
 			response
 				.text()
 				.then((accounts) => {
-					var re = new RegExp(
+					const re = new RegExp(
 						accountSelectionRegex.replace("DOMAIN", props.organization_domain),
 						"i",
 					);
-					let accountData = accounts.match(re);
+					const accountData = accounts.match(re);
 					if (accountData === null) {
-						let msg = `Organization domain not found. Please check that you have a Google Account with that domain name logged in.`;
+						const msg = "Organization domain not found. Please check that you have a Google Account with that domain name logged in.";
 						throw msg;
 					}
-					let accountIndex = accountData[1];
+					const accountIndex = accountData[1];
 					//if(accountIndex==-1){
 					//let msg = `${accountData[2]} is not logged in. Please login and try again.`
 					//throw msg
@@ -221,7 +215,7 @@ function awsInit(props, port = null, jobType = "refresh") {
 							response
 								.text()
 								.then((result) => {
-									let samlResponse = result.match(googleSsoRegex)[1];
+									const samlResponse = result.match(googleSsoRegex)[1];
 									switch (jobType) {
 										case "role_refresh":
 											refreshAwsRoles(port, samlResponse);
@@ -235,28 +229,28 @@ function awsInit(props, port = null, jobType = "refresh") {
 									}
 								})
 								.catch((error) => {
-									let msg = `Error processing SSO URL:${error}`;
+									const msg = `Error processing SSO URL:${error}`;
 									errHandler(port, msg);
 								});
 						})
 						.catch((error) => {
-							let msg = `Error fetching SSO URL:${error}`;
+							const msg = `Error fetching SSO URL:${error}`;
 							errHandler(port, msg);
 						});
 				})
 				.catch((error) => {
-					let msg = `Error processing Google account chooser data:${error}`;
+					const msg = `Error processing Google account chooser data:${error}`;
 					errHandler(port, msg);
 				});
 		})
 		.catch((error) => {
-			let msg = `Error finding Google account:${error}`;
+			const msg = `Error finding Google account:${error}`;
 			errHandler(port, msg);
 		});
 }
 
 function fetchSts(roleArn, principalArn, samlResponse, props, port) {
-	let STSUrl = `${awsStsUrl}/?Version=2011-06-15&Action=AssumeRoleWithSAML&RoleArn=${roleArn}&PrincipalArn=${principalArn}&SAMLAssertion=${encodeURIComponent(samlResponse.trim())}&AUTHPARAMS&DurationSeconds=${props.session_duration}`;
+	const STSUrl = `${awsStsUrl}/?Version=2011-06-15&Action=AssumeRoleWithSAML&RoleArn=${roleArn}&PrincipalArn=${principalArn}&SAMLAssertion=${encodeURIComponent(samlResponse.trim())}&AUTHPARAMS&DurationSeconds=${props.session_duration}`;
 	fetch(STSUrl, {
 		method: "GET",
 		headers: requestHeaders,
@@ -265,15 +259,13 @@ function fetchSts(roleArn, principalArn, samlResponse, props, port) {
 		.then((data) => {
 			const parseGlobal = RegExp(stsTokenRegex, "g");
 			let matches;
-			let credobj = {};
+			const credobj = {};
 			while ((matches = parseGlobal.exec(data)) !== null) {
-				matches = matches.filter(function (i) {
-					return i != null;
-				});
+				matches = matches.filter((i) => i != null);
 				storage.set({ [`aws${matches[1]}`]: matches[2] });
 				credobj[`${matches[1]}`] = matches[2];
 			}
-			if (props["clientupdate"]) {
+			if (props.clientupdate) {
 				fetch("http://localhost:31339/update", {
 					method: "POST",
 					headers: {
@@ -284,12 +276,12 @@ function fetchSts(roleArn, principalArn, samlResponse, props, port) {
 				})
 					.then((response) => response.text())
 					.then((data) => {
-						if (data != "ok") {
+						if (data !== "ok") {
 							errHandler(port, data);
 						}
 					})
 					.catch((error) => {
-						let msg = `Error updating local client:${error}`;
+						const msg = `Error updating local client:${error}`;
 						errHandler(port, msg);
 					});
 			}
@@ -298,7 +290,7 @@ function fetchSts(roleArn, principalArn, samlResponse, props, port) {
 			if (port) port.postMessage("sts_ready");
 		})
 		.catch((error) => {
-			let msg = `Error getting STS credentials:${error}`;
+			const msg = `Error getting STS credentials:${error}`;
 			errHandler(port, msg);
 		});
 }

@@ -46,21 +46,17 @@ function populateCheckboxesAndButtons(props) {
 			}
 		});
 	}
-	//if autofill is enabled make all textboxes readonly
-	if (props.autofill == 1) {
-		$("#autofill_btn").css({ "background-color": "#ff5400", "--enabled": 1 });
-	}
 }
 
 async function buildMenu(props) {
 	$("#grid").empty();
-	for (let i = 0; i < parseInt(props.roleCount); i++) {
+	for (let i = 0; i < Number.parseInt(props.roleCount); i++) {
 		jQuery("<div>", {
 			id: `item${i}`,
 			class: `item${i}`,
 		}).appendTo("#grid");
 
-		let textboxProperties = {
+		const textboxProperties = {
 			type: "text",
 			value: "",
 			id: `role${i}`,
@@ -68,18 +64,9 @@ async function buildMenu(props) {
 			class: "txtbox",
 			"data-index": i,
 		};
-		//if autofill is enabled make all textboxes readonly
-		if (props.autofill == 1) {
-			textboxProperties["readonly"] = "readonly";
-			$(".txtbox").css("pointer-events", "none");
-		}
+		textboxProperties.readonly = "readonly";
+		$(".txtbox").css("pointer-events", "none");
 		jQuery("<input>", textboxProperties).appendTo(`#item${i}`);
-
-		jQuery("<button>", {
-			class: "button clibtn",
-			id: `sts_button${i}`,
-			"data-index": i,
-		}).appendTo(`#item${i}`);
 
 		jQuery("<label>", {
 			id: `label${i}`,
@@ -95,6 +82,12 @@ async function buildMenu(props) {
 		jQuery("<span>", {
 			class: "slider round",
 		}).appendTo(`#label${i}`);
+
+		jQuery("<button>", {
+			class: "button clibtn",
+			id: `sts_button${i}`,
+			"data-index": i,
+		}).appendTo(`#item${i}`);
 	}
 	handleTextboxes(props);
 	populateCheckboxesAndButtons(props);
@@ -115,58 +108,54 @@ async function main() {
 		storage.set({ roleCount: 1 });
 		$("#go-to-options").click();
 	}
+
 	buildMenu(props);
+
 	$("#clibtn").hover(function () {
 		alert($(this).prop("title"));
 	});
-	//interation with autofill btn.
-	$("#autofill_btn").click(function () {
-		if ($(this).css("--enabled") == 0) {
-			storage.set({ autofill: 1 });
-			$(this).css({ "background-color": "#ff5400", "--enabled": 1 });
-			let port = chrome.runtime.connect({
-				name: "talk to background.js",
-			});
-			port.postMessage("role_refresh");
-			port.onMessage.addListener(function (msg) {
-				if (msg == "roles_refreshed") {
-					location.reload();
-				} else if (msg.includes("err")) {
-					storage.get(["last_msg_detail"], function (result) {
-						$("#msg").text(result.last_msg_detail);
-					});
-				} else {
-					console.log("Service worker response:" + msg);
-				}
-			});
-		} else {
-			storage.set({ autofill: 0 });
-			$(this).css({ "background-color": "#4d4d4d", "--enabled": 0 });
-			location.reload();
-		}
+
+	$('[id^="refresh-roles"]').click(() => {
+		storage.set({ autofill: 1 });
+		const port = chrome.runtime.connect({
+			name: "talk to background.js",
+		});
+		port.postMessage("role_refresh");
+		port.onMessage.addListener((msg) => {
+			if (msg === "roles_refreshed") {
+				location.reload();
+			} else if (msg.includes("err")) {
+				storage.get(["last_msg_detail"], (result) => {
+					$("#msg").text(result.last_msg_detail);
+				});
+			} else {
+				console.log(`Service worker response:${msg}`);
+			}
+		});
 	});
+
 	//uncheck all checkboxes when modifying role ARNs
-	$("input[id^='role']").focus(function () {
+	$("input[id^='role']").focus(() => {
 		$("input[id^='enable'][type='checkbox']").each(function (index, obj) {
 			$(this).prop("checked", false);
 		});
-		let port = chrome.runtime.connect({
+		const port = chrome.runtime.connect({
 			name: "talk to background.js",
 		});
 		port.postMessage("refreshoff");
 	});
 	//Save data to local storage automatically when not focusing on TxtBox
 	$("input[id^='role']").focusout(function () {
-		let roleName = $(this).attr("id");
-		let roleValue = $(this).val();
-		let obj = {
+		const roleName = $(this).attr("id");
+		const roleValue = $(this).val();
+		const obj = {
 			[roleName]: roleValue,
 		};
 		storage.set(obj);
 	});
 	//get the STS token from storage when clicking the CLI button.
 	$('[id^="sts_button"]').click(function () {
-		let index = $(this).attr("data-index");
+		const index = $(this).attr("data-index");
 		if ($(`#enable${index}`).prop("checked")) {
 			storage.get(
 				[
@@ -176,7 +165,7 @@ async function main() {
 					"awsSessionToken",
 					"awsExpiration",
 				],
-				function (data) {
+				(data) => {
 					let stsCommand;
 					switch (data.platform.toLowerCase()) {
 						case "windows":
@@ -186,7 +175,7 @@ async function main() {
 						default:
 							stsCommand = "export";
 					}
-					let stscli = `${stsCommand} AWS_ACCESS_KEY_ID=${data.awsAccessKeyId} && ${stsCommand} AWS_SECRET_ACCESS_KEY=${data.awsSecretAccessKey} && ${stsCommand} AWS_SESSION_TOKEN=${data.awsSessionToken} && ${stsCommand} AWS_SESSION_EXPIRATION=${data.awsExpiration}`;
+					const stscli = `${stsCommand} AWS_ACCESS_KEY_ID=${data.awsAccessKeyId} && ${stsCommand} AWS_SECRET_ACCESS_KEY=${data.awsSecretAccessKey} && ${stsCommand} AWS_SESSION_TOKEN=${data.awsSessionToken} && ${stsCommand} AWS_SESSION_EXPIRATION=${data.awsExpiration}`;
 					navigator.clipboard.writeText(stscli).then(
 						() => {
 							alert("token copied to clipboard");
@@ -202,21 +191,21 @@ async function main() {
 	//Action when a checkbox is changed
 	$("input[id^='enable'][type='checkbox']").change(function () {
 		$("#msg").text("");
-		let id = $(this).attr("id");
-		let dataIndex = $(this).attr("data-index");
+		const id = $(this).attr("id");
+		const dataIndex = $(this).attr("data-index");
 		// hide all sts buttons
 		$("[id^='sts_button']").each(function () {
 			$(this).css("visibility", "hidden");
 		});
 		if (!this.checked) {
-			let port = chrome.runtime.connect({
+			const port = chrome.runtime.connect({
 				name: "talk to background.js",
 			});
 			port.postMessage("refreshoff");
 		} else {
 			//uncheck other checkboxes.
 			$("input[id^='enable'][type='checkbox']").each(function () {
-				if ($(this).attr("id") != id) {
+				if ($(this).attr("id") !== id) {
 					$(this).prop("checked", false);
 				}
 			});
@@ -231,7 +220,7 @@ async function main() {
 				storage.set({ checked: $(this).attr("id") });
 			});
 			//start background service functions
-			let port = chrome.runtime.connect({
+			const port = chrome.runtime.connect({
 				name: "talk to background.js",
 			});
 			port.postMessage("refreshon");
@@ -249,12 +238,12 @@ async function main() {
 				} else if (msg.includes("err")) {
 					$(`[id^='sts_button'][data-index=${dataIndex}]`).each(function () {
 						$(this).css("background-image", "url(/img/err.png)");
-						storage.get(["last_msg_detail"], function (result) {
+						storage.get(["last_msg_detail"], (result) => {
 							$("#msg").text(result.last_msg_detail);
 						});
 					});
 				} else {
-					console.log("Service worker response:" + msg);
+					console.log(`Service worker response: ${msg}`);
 				}
 			});
 		}
