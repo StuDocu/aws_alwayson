@@ -68,12 +68,6 @@ async function buildMenu(props) {
 		$(".txtbox").css("pointer-events", "none");
 		jQuery("<input>", textboxProperties).appendTo(`#item${i}`);
 
-		jQuery("<button>", {
-			class: "button clibtn",
-			id: `sts_button${i}`,
-			"data-index": i,
-		}).appendTo(`#item${i}`);
-
 		jQuery("<label>", {
 			id: `label${i}`,
 			class: "switch btncls",
@@ -88,6 +82,12 @@ async function buildMenu(props) {
 		jQuery("<span>", {
 			class: "slider round",
 		}).appendTo(`#label${i}`);
+
+		jQuery("<button>", {
+			class: "button clibtn",
+			id: `sts_button${i}`,
+			"data-index": i,
+		}).appendTo(`#item${i}`);
 	}
 	handleTextboxes(props);
 	populateCheckboxesAndButtons(props);
