@@ -20,18 +20,18 @@ $(".txtbox").focusout(function () {
 
 //Save checkboxes values to local storage
 $(":checkbox").change(function () {
-	let optionName = $(this).attr("id");
-	let optionValue = $(this).prop("checked");
-	let obj = {
+	const optionName = $(this).attr("id");
+	const optionValue = $(this).prop("checked");
+	const obj = {
 		[optionName]: optionValue,
 	};
 	storage.set(obj);
 });
 // Save dropdown menu options
 $("select").change(function () {
-	let optionName = $(this).attr("id");
-	let optionValue = $(this).val();
-	let obj = {
+	const optionName = $(this).attr("id");
+	const optionValue = $(this).val();
+	const obj = {
 		[optionName]: optionValue,
 	};
 	storage.set(obj);
@@ -67,18 +67,18 @@ $("img[id^='infoPic']")
 		$(".layout").text($(this).attr("alt"));
 	})
 	.mouseover(function (event) {
-		var left = event.pageX - $(this).offset().left + 100;
-		var top = $(this).offset().top - window.scrollY - 32;
+		const left = event.pageX - $(this).offset().left + 100;
+		const top = $(this).offset().top - window.scrollY - 32;
 		$(".layout").css({ top: top, left: left });
 		$(".layout").css("display", "block");
 	})
-	.mouseleave(function () {
+	.mouseleave(() => {
 		$(".layout").css("display", "none");
 		$(".layout").text("");
 	});
 
 $(".tablinks").click(function () {
-	let id = $(this).prop("id");
+	const id = $(this).prop("id");
 	$(".grid-container").each(function () {
 		if ($(this).prop("id") === id) {
 			$(this).css("display", "grid");
