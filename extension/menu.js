@@ -108,12 +108,14 @@ async function main() {
 		storage.set({ roleCount: 1 });
 		$("#go-to-options").click();
 	}
+
 	buildMenu(props);
+
 	$("#clibtn").hover(function () {
 		alert($(this).prop("title"));
 	});
 
-	if (!props.autofill) {
+	$('[id^="refresh-roles"]').click(() => {
 		storage.set({ autofill: 1 });
 		const port = chrome.runtime.connect({
 			name: "talk to background.js",
@@ -130,7 +132,7 @@ async function main() {
 				console.log(`Service worker response:${msg}`);
 			}
 		});
-	}
+	});
 
 	//uncheck all checkboxes when modifying role ARNs
 	$("input[id^='role']").focus(() => {
